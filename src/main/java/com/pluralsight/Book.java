@@ -2,6 +2,8 @@ package com.pluralsight;
 
 // Book class
 public class Book {
+
+    // data within the Class Object is private (we don't want it to be accessed outside of methods)
     private int id;
     private String isbn;
     private String title;
@@ -10,28 +12,13 @@ public class Book {
 
 
     // constructor method that allows us to create an instance of obj Book
-    public Book(int id, String isbn, String title, boolean isCheckedOut, String checkedOutTo) {
+    public Book(int id, String isbn, String title) {
 
         this.id = id;
         this.isbn = isbn;
         this.title = title;
-        this.isCheckedOut = isCheckedOut;
-        this.checkedOutTo = checkedOutTo;
-    }
-
-    // methods
-    public void checkOut( String name){ // this method is void because it's only printing something
-       // add a verifiable statement to see if book is already checked out
-        isCheckedOut = true; // only works in this method because there is no other instance of 'isCheckedOut'
-        this.checkedOutTo = name; // so both statements work but "this." references the variable "checkedOutTo"
-        // that is specific to the class named checkedOutTo
-
-    }
-
-    public void checkIn(){ // when the method is incomplete, its called a method stub
-        this.checkedOutTo = "";
         this.isCheckedOut = false;
-
+        this.checkedOutTo = "";
     }
 
 
@@ -60,19 +47,33 @@ public class Book {
         this.title = title;
     }
 
-    public boolean isCheckedOut() {
+    public boolean isCheckedOut() { // removed the  setter for isCheckedOut
+        // because we don't want a user altering whether isCheckedOut is true/false
+        // there is a separate method for that process
         return isCheckedOut;
     }
 
-    public void setCheckedOut(boolean checkedOut) {
-        isCheckedOut = checkedOut;
-    }
-
-    public String getCheckedOutTo() {
+    public String getCheckedOutTo() { // removed the setter for checkedOutTo because there is a specific method
+        // to alter this variable, and we don't want the User to be able to change the variable
         return checkedOutTo;
     }
 
-    public void setCheckedOutTo(String checkedOutTo) {
-        this.checkedOutTo = checkedOutTo;
+
+    // for the action within a method, what is the data needed to ask and complete that task?
+    // that data is added within a parameter
+    // methods
+    public void checkOut( String name){ // this method is void because it's only printing something
+        // add a verifiable statement to see if book is already checked out
+        isCheckedOut = true; // only works in this method because there is no other instance of 'isCheckedOut'
+        this.checkedOutTo = name; // so both statements work but "this." references the variable 'checkedOutTo'
+        // that is specific to the class named checkedOutTo
+
+        // using '.this' is to be ultra specific, standard use
+
+    }
+
+    public void checkIn(){ // when the method is incomplete, it's called a method stub - nothing within brackets
+        this.isCheckedOut = false;
+        this.checkedOutTo = "";
     }
 }
