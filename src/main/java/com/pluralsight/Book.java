@@ -67,7 +67,7 @@ public class Book {
         // add a verifiable statement to see if book is already checked out
         isCheckedOut = true; // only works in this method because there is no other instance of 'isCheckedOut'
         this.checkedOutTo = name; // so both statements work but "this." references the variable 'checkedOutTo'
-        // that is specific to the class named checkedOutTo
+        // that is specific to the Book class variable 'checkedOutTo'
         // using '.this' is to be ultra specific, standard use
     }
 
