@@ -1,0 +1,20 @@
+1|ISBN 978-0-261-10221-7|The Fellowship of the Ring
+2|ISBN 978-0-553-57340-4|A Game of Thrones
+3|ISBN 978-0-06-112008-4|The Lion, the Witch and the Wardrobe
+4|ISBN 978-0-345-33970-6|The Name of the Wind
+5|ISBN 978-0-06-231500-7|Mistborn: The Final Empire
+6|ISBN 978-1-250-30803-0|The Way of Kings
+7|ISBN 978-0-06-196587-9|The Eye of the World
+8|ISBN 978-1-250-76284-9|The Priory of the Orange Tree
+9|ISBN 978-0-7653-6892-7|The Blade Itself
+10|ISBN 978-1-101-91297-4|Uprooted
+11|ISBN 978-1-250-30491-9|A Deadly Education
+12|ISBN 978-0-316-01794-3|The Magicians
+13|ISBN 978-1-250-19899-0|The House in the Cerulean Sea
+14|ISBN 978-0-345-45693-9|Elantris
+15|ISBN 978-0-06-057528-5|Jonathan Strange & Mr Norrell
+16|ISBN 978-0-553-10641-1|The Black Prism
+17|ISBN 978-1-250-17541-0|Spinning Silver
+18|ISBN 978-0-575-08971-7|Sabriel
+19|ISBN 978-0-06-202404-0|An Ember in the Ashes
+20|ISBN 978-1-250-22125-4|Legends & Lattes

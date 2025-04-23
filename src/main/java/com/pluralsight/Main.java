@@ -1,5 +1,7 @@
 package com.pluralsight;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Main {
 
@@ -18,8 +20,7 @@ public class Main {
 
     }
 
-    private static Scanner scanner = new Scanner(System.in);
-
+    private static Console console = new Console();
 
     private static Book[] library = getPopulatedLibrary(); // will allow the array we created
     // to be assigned to the variable library and is set to the value of
@@ -67,9 +68,7 @@ public class Main {
         do { // here we choose a do/while loop because we want this to run at least once
             // because we want the print statement to print
             // this will rerun the display until the option is 0
-            System.out.println(homeScreenPrompt);
-            option = scanner.nextInt();
-            scanner.nextLine(); // remove crlf
+            option = console.promptForInt(homeScreenPrompt);
             switch(option){
                 case 1: ShowAvailableBooksScreen();
                     break;
@@ -78,35 +77,38 @@ public class Main {
                 case 0: System.out.println("Exiting the library! Have a nice day!");
                     break;
                 default:
-                    System.out.println("Not a valid option. Please try again!");
+                    System.out.println("Not a valid entry. Please try again!");
             }
         } while (option != 0);
+    }
+
+    // when there is a clear instruction (what to do) and a specific method of achieving that result (how to do it)
+    // it is possible to change it into its own method - displayAvailableBooks
+    private static void displayAvailableBooks(){
+        for(Book book : library){
+            if (book != null && !book.isCheckedOut()){
+                System.out.println(book);
+            }
+        }
     }
 
     private static void ShowAvailableBooksScreen() {
         int choice;
         do {
             // prompt user to check out book or exit to home screen
-            System.out.println("[1] Would you like to check out a book? \n"
-                    + "[2] or exit to home screen?");
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            String availableBookPrompt = "[1] Would you like to check out a book? \n"
+                    + "[2] or exit to home screen?";
 
+            choice = console.promptForInt(availableBookPrompt);
             switch(choice){
                 case 1:
                     System.out.println("Here is a list of available books: \n");
                     // for each instance of book in library, we are checking if the book is available
                     // if the book does not return null and is not false
-                    for(Book book : library){
-                        if (book != null && !book.isCheckedOut()){
-                            System.out.println(book);
-                        }
-                    }
+                   displayAvailableBooks();
 
                     // prompt user to enter book ID to select
-                    System.out.print("Please enter the book ID to select it: ");
-                    int bookID = scanner.nextInt();
-                    scanner.nextLine();
+                    int bookID = console.promptForInt("Please enter the book ID to select it: ");
 
                     // we are creating this variable to hold user input and check through
                     // the getBooksByID method whether the book ID matches one in the library array
@@ -115,8 +117,7 @@ public class Main {
                     // prompt user for name to save within the isCheckedOut && isCheckedOut methods
                     // using the Book variable selectedBook
                     String name;
-                    System.out.print("Please enter your name for check out: ");
-                    name = scanner.nextLine();
+                    name = console.promptForString("Please enter your name for check out: ");
 
                     System.out.printf("Thank you %s, you have checked out: %s", name, selectedBook);
 
@@ -153,8 +154,7 @@ public class Main {
             String checkOutPrompt = "[C] Check in a book" +
                     " [X] Go back to home screen";
 
-            System.out.println(checkOutPrompt);
-            String choice = scanner.nextLine().trim().toUpperCase(); // .trim() tells the computer to ignore
+            String choice = console.promptForString(checkOutPrompt).trim().toUpperCase(); // .trim() tells the computer to ignore
             // any whitespace or Enter the user inputs
             // .toUpperCase() changes the user input specifically to UpperCase as that matches the options provided
             // while keeping in mind user error
@@ -163,9 +163,7 @@ public class Main {
             switch (choice){
                 case "C": // now that we altered the user input directly, we can use a switch statement instead of
                     // checking if the 'choice' equalsIgnoreCase("C")
-                    System.out.println("Please enter the id number of the book you'd like to return");
-                    int bookID = scanner.nextInt();
-                    scanner.nextLine();
+                    int bookID = console.promptForInt("Please enter the ID number of the book you'd like to return");
 
                     if(bookID > 0 && bookID <= library.length){ // this if statement checks whether the bookID
                         // the user entered would match an index of a book within the length of library
@@ -193,8 +191,26 @@ public class Main {
     private static Book getBooksById(Book[] library, int id){
         for(Book book : library){
             if(book.getId() == id)
-            return book;
+                return book;
         }
         return null;
+    }
+
+    private static Book[] getPopulatedBooks() throws IOException{
+        FileReader fr = new FileReader("books.txt");
+        BufferedReader reader = new BufferedReader(fr);
+
+        Book[] booksTemp = new Book[1000];
+        int size = 0;
+        String dataString;
+
+        while(dataString = reader.readLine() != null){
+            booksTemp[size] = dataString;
+
+            size++
+        }
+        Book[] booksFinal = Arrays.copyof(booksTemp, size);
+
+        return booksFinal
     }
 }
