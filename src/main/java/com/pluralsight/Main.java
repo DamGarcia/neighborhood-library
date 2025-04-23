@@ -1,12 +1,11 @@
 package com.pluralsight;
-
-
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args){
-        Book[] library = getPopulatedLibrary();
+    public static void main(String[] args) {
+        // creates the variable 'library' that holds the value of Book[] library
+        // which holds the value of getPopulatedLibrary()
 
 
 //        Book book = new Book(1, "asfg", "this is a title");
@@ -21,14 +20,13 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
 
-
     private static Book[] library = getPopulatedLibrary(); // will allow the array we created
     // to be assigned to the value in library and is set to the value of
     // the return of getPopulatedLibrary() | is available anywhere within Main
 
     // this method is NOT within the Book.java because this method is referencing the library (multiple books)
     // the Book.java is only looking to control the behavior of a singular book
-    private static Book[] getPopulatedLibrary(){
+    private static Book[] getPopulatedLibrary() {
 
         Book[] library = new Book[20]; // creating a new instance of an array from the object Book and saving it in library
 
@@ -56,40 +54,142 @@ public class Main {
         return library;
     }
 
-    private static void ShowHomeScreen(){
-        String homeScreenPrompt = "Welcome to the Library! \n" +
-                "Please select an option from the following: \n" +
-                "   1 - Show Available Books \n  " +
-                "   2 - Show Checked Out Books \n  " +
-                "   0 - Exit library \n  " +
-                "(1, 2, 0):";
+    private static void ShowHomeScreen() {
+        String homeScreenPrompt = "Welcome to the Library! \n"
+                + "Please select an option from the following: \n"
+                + "1 - Show Available Books \n"
+                + "2 - Show Checked Out Books \n"
+                + "0 - Exit library \n"
+                + "(1, 2, 0):";
 
         int option;
-        do{ // here we choose a do/while loop because we want this to run at least once
+        do { // here we choose a do/while loop because we want this to run at least once
             // because we want the print statement to print
             // this will rerun the display until the option is 0
             System.out.println(homeScreenPrompt);
             option = scanner.nextInt();
             scanner.nextLine(); // remove crlf
-            if (option == 1){
+            if (option == 1) {
                 ShowAvailableBooksScreen();
-            } else if(option == 2){
+            } else if (option == 2) {
                 ShowCheckedOutBooksScreen();
-            } else if(option == 0){
+            } else if (option == 0) {
                 System.out.println("Exiting the library, have a nice day!");
-            } else{
+            } else {
                 System.out.println("Error! Not a valid option. Please try again!");
             }
-        } while(option != 0);
+        } while (option != 0);
     }
 
-    private static void ShowAvailableBooksScreen(){
-        System.out.println("... todo available books menu here");
+    private static void ShowAvailableBooksScreen() {
+        int choice;
+        do {
+            // prompt user to check out book or exit to home screen
+            System.out.println("[1] Would you like to check out a book? \n"
+                    + "[2] or exit to home screen?");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+
+            // takes user input and checks each condition
+            if (choice == 1) {
+
+                System.out.println("Here is the list of available books: \n");
+                for (Book book : library) {
+                    // for each instance of book in library, we are checking if the book is available
+                    // if the book does not return null and is not false
+                    if(book != null && !book.isCheckedOut()){
+                        System.out.println(book);
+                    }
+                }
+
+                // prompt user to enter book id number
+                System.out.print("Please enter book ID number: ");
+                int bookId = scanner.nextInt();
+                scanner.nextLine();
+
+                // we created a method to get a book with the Id number which we assign
+                // to a new data type (Book) initialized to the variable selectedBook
+                // and is set to the value of getBooksById(param1, param2)
+                // increases usability rather than typing it out again
+                Book selectedBook = getBooksById(library, bookId);
+
+
+                String name;
+                    if(selectedBook != null && !selectedBook.isCheckedOut()){
+                        // prompt user to input their name
+                        System.out.print("Input your name: ");
+                        name = scanner.nextLine();
+
+                        // we then call the variable that is of Book Class
+                        // and use the Book method .checkOut(param)
+                        // this method instance will trigger the statements within .checkOut
+                        selectedBook.checkOut(name);
+
+                        System.out.println("Thank you " + name + " you have selected: " + selectedBook);
+
+                    } else {System.out.println("Sorry, this book is already checked out!");}
+
+            }
+        } while (choice!= 2);
+        System.out.println("Sorry, invalid input taken! Please try again!");
     }
 
-    private static void ShowCheckedOutBooksScreen(){
-        System.out.println("...todo checked out books screen");
+    private static void ShowCheckedOutBooksScreen() {
+        System.out.println("Books currently checked out: \n");
+        int bookCheckOut = 0; // makes it easier to check whether a book is actually checked out
+
+        for(Book book : library){
+            // for each iteration within array library, if a book.isCheckedOut() == true;
+            // the print statement will run and increase the counter which can be used to check
+            // if there are books checked out
+            if(book.isCheckedOut()){
+                System.out.println(book + " is checked out by " + book.getCheckedOutTo());
+                // loop through first and then print if none are found
+                bookCheckOut ++;
+            }
+        }
+
+        if(bookCheckOut > 0) {
+            // prompt user to check in a book or go back to home screen
+            String checkOutPrompt = "[C] Check in a book" +
+                    " [X] Go back to home screen";
+
+            System.out.println(checkOutPrompt);
+            String choice = scanner.nextLine().trim().toUpperCase(); // these additional modifiers help to alter
+            // user input directly which erases extra steps later in the code
+
+            switch (choice){
+                case "C": // now that we altered the user input directly, we can use a switch statement instead of
+                    // checking if the 'choice' equalsIgnoreCase("C")
+                    System.out.println("Please enter the id number of the book you'd like to return");
+                    int bookID = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if(bookID > 0 && bookID <= library.length){
+                        Book checkedOutBook = library[bookID - 1];
+                        if(checkedOutBook.isCheckedOut()){
+                            System.out.printf("Thank you %s, %d %s has been checked in \n\n"
+                                    , checkedOutBook.getCheckedOutTo()
+                                    , checkedOutBook.getId()
+                                    , checkedOutBook.getTitle());
+                            checkedOutBook.checkIn();
+                        }
+                    }
+                case "X": // same reason as the first case "C"
+                    return;
+
+                default:
+                    System.out.println("Invalid entry. Please try again!");
+            }
+        } else{System.out.println("There are currently no books checked out");}
     }
 
-
+    private static Book getBooksById(Book[] library, int id){
+        for(Book book : library){
+            if(book.getId() == id)
+            return book;
+        }
+        return null;
+    }
 }

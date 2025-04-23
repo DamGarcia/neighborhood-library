@@ -62,18 +62,25 @@ public class Book {
     // for the action within a method, what is the data needed to ask and complete that task?
     // that data is added within a parameter
     // methods
+    // this method is to be called when we are checking out a book
     public void checkOut( String name){ // this method is void because it's only printing something
         // add a verifiable statement to see if book is already checked out
         isCheckedOut = true; // only works in this method because there is no other instance of 'isCheckedOut'
         this.checkedOutTo = name; // so both statements work but "this." references the variable 'checkedOutTo'
         // that is specific to the class named checkedOutTo
-
         // using '.this' is to be ultra specific, standard use
-
     }
 
+    // this method is to be called when we check in a book
     public void checkIn(){ // when the method is incomplete, it's called a method stub - nothing within brackets
         this.isCheckedOut = false;
         this.checkedOutTo = "";
+    }
+
+    public String toString(){
+        return String.format("%d, %s, %s \n"
+        , this.getId()
+        , this.getIsbn()
+        , this.getTitle());
     }
 }
