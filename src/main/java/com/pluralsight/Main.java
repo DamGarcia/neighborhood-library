@@ -145,12 +145,11 @@ public class Main {
             // if there are books checked out
             if(book.isCheckedOut()){
                 System.out.println(book + " is checked out by " + book.getCheckedOutTo());
-                // loop through first and then print if none are found
                 bookCheckOut ++;
             }
         }
 
-        if(bookCheckOut > 0) {
+        if(bookCheckOut > 0) { // if statement checks if there are any books checked out based off the counter
             // prompt user to check in a book or go back to home screen
             String checkOutPrompt = "[C] Check in a book" +
                     " [X] Go back to home screen";
@@ -166,17 +165,22 @@ public class Main {
                     int bookID = scanner.nextInt();
                     scanner.nextLine();
 
-                    if(bookID > 0 && bookID <= library.length){
-                        Book checkedOutBook = library[bookID - 1];
-                        if(checkedOutBook.isCheckedOut()){
+                    if(bookID > 0 && bookID <= library.length){ // this if statement checks whether the bookID
+                        // the user entered would match an index of a book within the length of library
+                        Book checkedOutBook = library[bookID - 1]; // this line initializes checkedOutBook
+                        // as a book variable that saves the index of library to the new variable
+                        // ( adding -1) accounts for user input not matching index cases within computer
+                        if(checkedOutBook.isCheckedOut()){ // if statement checks if the new variable
+                            // (using a book instance method) equals true and prints
                             System.out.printf("Thank you %s, %d %s has been checked in \n\n"
                                     , checkedOutBook.getCheckedOutTo()
                                     , checkedOutBook.getId()
                                     , checkedOutBook.getTitle());
-                            checkedOutBook.checkIn();
+                            checkedOutBook.checkIn(); // this line of code will make sure to alter
+                            // the status of .checkIn() back to false
                         }
                     }
-                case "X": // same reason as the first case "C"
+                case "X": // same reason as case "C"
                     return;
 
                 default:
