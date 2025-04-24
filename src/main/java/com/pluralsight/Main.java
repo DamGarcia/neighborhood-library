@@ -1,7 +1,8 @@
 package com.pluralsight;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -22,39 +23,39 @@ public class Main {
 
     private static Console console = new Console();
 
-    private static Book[] library = getPopulatedLibrary(); // will allow the array we created
+    private static Book[] library = getPopulatedBooks(); // will allow the array we created
     // to be assigned to the variable library and is set to the value of
     // the return of getPopulatedLibrary() | is available anywhere within Main
 
     // this method is NOT within the Book.java because this method is referencing the library (multiple books)
     // the Book.java is only looking to control the behavior of a singular book
-    private static Book[] getPopulatedLibrary() {
-
-        Book[] library = new Book[20]; // creating a new instance of an array from the object Book and saving it in library
-
-        library[0] = new Book(1, "ISBN 978-0-261-10236-9", "The Fellowship of the Ring");
-        library[1] = new Book(2, "ISBN 978-0-261-10237-6", "The Two Towers");
-        library[2] = new Book(3, "ISBN 978-0-261-10238-3", "The Return of the King");
-        library[3] = new Book(4, "ISBN 978-0-553-57340-4", "A Game of Thrones");
-        library[4] = new Book(5, "ISBN 978-0-553-57990-1", "A Clash of Kings");
-        library[5] = new Book(6, "ISBN 978-0-553-10663-3", "A Storm of Swords");
-        library[6] = new Book(7, "ISBN 978-0-06-447104-6", "Eragon");
-        library[7] = new Book(8, "ISBN 978-0-06-089876-2", "Eldest");
-        library[8] = new Book(9, "ISBN 978-0-06-089879-3", "Brisingr");
-        library[9] = new Book(10, "ISBN 978-0-06-202406-0", "Inheritance");
-        library[10] = new Book(11, "ISBN 978-1-250-30718-4", "The Name of the Wind");
-        library[11] = new Book(12, "ISBN 978-0-7564-0407-9", "The Wise Man's Fear");
-        library[12] = new Book(13, "ISBN 978-0-06-112241-5", "The Lion, the Witch and the Wardrobe");
-        library[13] = new Book(14, "ISBN 978-0-06-447105-3", "Prince Caspian");
-        library[14] = new Book(15, "ISBN 978-0-06-623850-0", "The Horse and His Boy");
-        library[15] = new Book(16, "ISBN 978-0-06-447106-0", "The Silver Chair");
-        library[16] = new Book(17, "ISBN 978-0-06-447107-7", "The Last Battle");
-        library[17] = new Book(18, "ISBN 978-0-316-01724-4", "The Final Empire");
-        library[18] = new Book(19, "ISBN 978-0-316-01725-1", "The Well of Ascension");
-        library[19] = new Book(20, "ISBN 978-0-316-01726-8", "The Hero of Ages");
-
-        return library;
-    }
+//    private static Book[] getPopulatedLibrary() {
+//
+//        Book[] library = new Book[20]; // creating a new instance of an array from the object Book and saving it in library
+//
+//        library[0] = new Book(1, "ISBN 978-0-261-10236-9", "The Fellowship of the Ring");
+//        library[1] = new Book(2, "ISBN 978-0-261-10237-6", "The Two Towers");
+//        library[2] = new Book(3, "ISBN 978-0-261-10238-3", "The Return of the King");
+//        library[3] = new Book(4, "ISBN 978-0-553-57340-4", "A Game of Thrones");
+//        library[4] = new Book(5, "ISBN 978-0-553-57990-1", "A Clash of Kings");
+//        library[5] = new Book(6, "ISBN 978-0-553-10663-3", "A Storm of Swords");
+//        library[6] = new Book(7, "ISBN 978-0-06-447104-6", "Eragon");
+//        library[7] = new Book(8, "ISBN 978-0-06-089876-2", "Eldest");
+//        library[8] = new Book(9, "ISBN 978-0-06-089879-3", "Brisingr");
+//        library[9] = new Book(10, "ISBN 978-0-06-202406-0", "Inheritance");
+//        library[10] = new Book(11, "ISBN 978-1-250-30718-4", "The Name of the Wind");
+//        library[11] = new Book(12, "ISBN 978-0-7564-0407-9", "The Wise Man's Fear");
+//        library[12] = new Book(13, "ISBN 978-0-06-112241-5", "The Lion, the Witch and the Wardrobe");
+//        library[13] = new Book(14, "ISBN 978-0-06-447105-3", "Prince Caspian");
+//        library[14] = new Book(15, "ISBN 978-0-06-623850-0", "The Horse and His Boy");
+//        library[15] = new Book(16, "ISBN 978-0-06-447106-0", "The Silver Chair");
+//        library[16] = new Book(17, "ISBN 978-0-06-447107-7", "The Last Battle");
+//        library[17] = new Book(18, "ISBN 978-0-316-01724-4", "The Final Empire");
+//        library[18] = new Book(19, "ISBN 978-0-316-01725-1", "The Well of Ascension");
+//        library[19] = new Book(20, "ISBN 978-0-316-01726-8", "The Hero of Ages");
+//
+//        return library;
+//    }
 
     private static void ShowHomeScreen() {
         String homeScreenPrompt = "Welcome to the Library! \n"
@@ -196,21 +197,44 @@ public class Main {
         return null;
     }
 
-    private static Book[] getPopulatedBooks() throws IOException{
-        FileReader fr = new FileReader("books.txt");
-        BufferedReader reader = new BufferedReader(fr);
+    private static Book[] getPopulatedBooks(){
 
-        Book[] booksTemp = new Book[1000];
-        int size = 0;
-        String dataString;
+        try {
+            FileReader fr = new FileReader("books.txt");
+            BufferedReader reader = new BufferedReader(fr);
+            Book[] booksTemp = new Book[1000];
 
-        while(dataString = reader.readLine() != null){
-            booksTemp[size] = dataString;
+            int size = 0;
+            String dataString;
 
-            size++
+            while((dataString = reader.readLine()) != null){
+
+                booksTemp[size] = getBookFromEncodedString(dataString);
+
+                size++;
+            }
+            Book[] booksFinal = Arrays.copyOf(booksTemp, size);
+
+            return booksFinal;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        Book[] booksFinal = Arrays.copyof(booksTemp, size);
-
-        return booksFinal
     }
+
+    private static Book getBookFromEncodedString(String encodedBook){
+
+        String[] temp = encodedBook.split(Pattern.quote("|"));
+
+        int id = Integer.parseInt(temp[0]);
+        String isbn = temp[1];
+        String title = temp[2];
+
+
+        Book result = new Book(id, isbn, title);
+        return result;
+
+    }
+
+
 }

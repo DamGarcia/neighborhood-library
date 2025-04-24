@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import java.sql.SQLOutput;
+
 // Book class
 public class Book {
 
@@ -58,7 +60,6 @@ public class Book {
         return checkedOutTo;
     }
 
-
     // for the action within a method, what is the data needed to ask and complete that task?
     // that data is added within a parameter
     // methods
@@ -75,6 +76,13 @@ public class Book {
     public void checkIn(){ // when the method is incomplete, it's called a method stub - nothing within brackets
         this.isCheckedOut = false;
         this.checkedOutTo = "";
+    }
+
+    public String getFormattedBookText(){
+
+        return
+                String.format("%-5d %-51s %21s", this.id, this.title, this.isbn);
+
     }
 
     public String toString(){
